@@ -1,6 +1,7 @@
 package messenger
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/json"
@@ -55,7 +56,8 @@ type Messenger struct {
 	MessageRead      MessageReadHandler
 	MessageEcho      MessageEchoHandler
 
-	Client *http.Client
+	Client  *http.Client
+	Context context.Context
 }
 
 // Handler is the main HTTP handler for the Messenger service.
