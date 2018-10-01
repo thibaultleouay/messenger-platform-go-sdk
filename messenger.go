@@ -55,7 +55,7 @@ type Messenger struct {
 	MessageRead      MessageReadHandler
 	MessageEcho      MessageEchoHandler
 
-	Client 			*http.Client
+	Client *http.Client
 }
 
 // Handler is the main HTTP handler for the Messenger service.
@@ -104,26 +104,26 @@ func (m *Messenger) handlePOST(rw http.ResponseWriter, req *http.Request) {
 		for _, message := range entry.Messaging {
 			if message.Delivery != nil {
 				if m.MessageDelivered != nil {
-					go m.MessageDelivered(entry.Event, message.MessageOpts, *message.Delivery)
+					m.MessageDelivered(entry.Event, message.MessageOpts, *message.Delivery)
 				}
 			} else if message.Message != nil && message.Message.IsEcho {
 				if m.MessageEcho != nil {
-					go m.MessageEcho(entry.Event, message.MessageOpts, *message.Message)
+					m.MessageEcho(entry.Event, message.MessageOpts, *message.Message)
 				}
 			} else if message.Message != nil {
 				if m.MessageReceived != nil {
-					go m.MessageReceived(entry.Event, message.MessageOpts, message.Message.ReceivedMessage)
+					m.MessageReceived(entry.Event, message.MessageOpts, message.Message.ReceivedMessage)
 				}
 			} else if message.Postback != nil {
 				if m.Postback != nil {
-					go m.Postback(entry.Event, message.MessageOpts, *message.Postback)
+					m.Postback(entry.Event, message.MessageOpts, *message.Postback)
 				}
 			} else if message.Read != nil {
 				if m.MessageRead != nil {
-					go m.MessageRead(entry.Event, message.MessageOpts, *message.Read)
+					m.MessageRead(entry.Event, message.MessageOpts, *message.Read)
 				}
 			} else if m.Authentication != nil {
-				go m.Authentication(entry.Event, message.MessageOpts, message.Optin)
+				m.Authentication(entry.Event, message.MessageOpts, message.Optin)
 			}
 		}
 	}

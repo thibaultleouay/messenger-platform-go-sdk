@@ -100,8 +100,8 @@ type MessageQuery struct {
 	Recipient        Recipient        `json:"recipient"`
 	Message          SendMessage      `json:"message"`
 	NotificationType NotificationType `json:"notification_type,omitempty"`
-	MessagingType 	 MessagingType 	  `json:"messaging_type,omitempty"`
-	MessageTag 	 	 MessageTag 	  `json:"tag,omitempty"`
+	MessagingType    MessagingType    `json:"messaging_type,omitempty"`
+	MessageTag       MessageTag       `json:"tag,omitempty"`
 }
 
 func (mq *MessageQuery) RecipientID(recipientID string) error {
