@@ -21,7 +21,23 @@ type Profile struct {
 // GetProfile fetches the recipient's profile from facebook platform
 // Non empty UserID has to be specified in order to receive the information
 func (m *Messenger) GetProfile(userID string) (*Profile, error) {
-	resp, err := m.doRequest("GET", fmt.Sprintf(GraphAPI+"/v2.6/%s?fields=first_name,last_name,profile_pic,locale,timezone,gender", userID), nil)
+	return m.fetchProfile(fmt.Sprintf(GraphAPI+"/v3.1/%s?fields=first_name,last_name,profile_pic", userID))
+}
+
+func (m *Messenger) GetProfileWithLocale(userID string) (*Profile, error) {
+	return m.fetchProfile(fmt.Sprintf(GraphAPI+"/v3.1/%s?fields=first_name,last_name,profile_pic,locale", userID))
+}
+
+func (m *Messenger) GetProfileWithTimeZone(userID string) (*Profile, error) {
+	return m.fetchProfile(fmt.Sprintf(GraphAPI+"/v3.1/%s?fields=first_name,last_name,profile_pic,timezone", userID))
+}
+
+func (m *Messenger) GetProfileWithGender(userID string) (*Profile, error) {
+	return m.fetchProfile(fmt.Sprintf(GraphAPI+"/v3.1/%s?fields=first_name,last_name,profile_pic,gender", userID))
+}
+
+func (m *Messenger) fetchProfile(profileEndpoint string) (*Profile, error) {
+	resp, err := m.doRequest("GET", profileEndpoint, nil)
 	if err != nil {
 		return nil, err
 	}
