@@ -159,7 +159,6 @@ func (m *Messenger) doRequest(method string, url string, body io.Reader) (*http.
 
 	if m.Client != nil {
 		return m.Client.Do(req)
-	} else {
-		return http.DefaultClient.Do(req)
 	}
+	return http.DefaultClient.Do(req)
 }
