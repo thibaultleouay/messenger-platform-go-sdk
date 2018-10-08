@@ -126,8 +126,17 @@ func TestHandler(t *testing.T) {
 		mess.MessageEcho = func(Event, MessageOpts, MessageEcho) {
 			wg.Done()
 		}
+		mess.TakeThread = func(Event, MessageOpts, TakeThreadControl) {
+			wg.Done()
+		}
+		mess.PassThread = func(Event, MessageOpts, PassThreadControl) {
+			wg.Done()
+		}
+		mess.RequestThread = func(Event, MessageOpts, RequestThreadControl) {
+			wg.Done()
+		}
 
-		wg.Add(6)
+		wg.Add(9)
 		// received
 		_ = r.Post("/", "application/json", `{"object":"page","entry":[{"id":"510249619162304","time":1468152703635,"messaging":[{"sender":{"id":"1066835436691078"},"recipient":{"id":"510249619162304"},"timestamp":1468152703534,"message":{"mid":"mid.1468152703527:6600c706f15a292027","seq":414,"text":"test"}}]}]}`)
 		// echo
@@ -140,7 +149,12 @@ func TestHandler(t *testing.T) {
 		_ = r.Post("/", "application/json", `{"object":"page","entry":[{"id":"510249619162304","time":1468152897212,"messaging":[{"sender":{"id":"1066835436691078"},"recipient":{"id":"510249619162304"},"timestamp":1468152897212,"postback":{"payload":"test"}}]}]}`)
 		// authentication
 		_ = r.Post("/", "application/json", `{"object":"page","entry":[{"id":"510249619162304","time":1468152897212,"messaging":[{"sender":{"id":"1066835436691078"},"recipient":{"id":"510249619162304"},"timestamp":1468152897212,"optin":{"ref":"test"}}]}]}`)
-
+		// takeThread
+		_ = r.Post("/", "application/json", `{"object":"page","entry":[{"id":"510249619162304","time":1468152897212,"messaging":[{"sender":{"id":"1066835436691078"},"recipient":{"id":"510249619162304"},"timestamp":1468152897212,"take_thread_control":{"previous_owner_app_id":"123456789","metadata":"Additional content that the caller wants to set"}}]}]}`)
+		// passThread
+		_ = r.Post("/", "application/json", `{"object":"page","entry":[{"id":"510249619162304","time":1468152897212,"messaging":[{"sender":{"id":"1066835436691078"},"recipient":{"id":"510249619162304"},"timestamp":1468152897212,"pass_thread_control":{"new_owner_app_id":"123456789","metadata":"Additional content that the caller wants to set"}}]}]}`)
+		// requestThread
+		_ = r.Post("/", "application/json", `{"object":"page","entry":[{"id":"510249619162304","time":1468152897212,"messaging":[{"sender":{"id":"1066835436691078"},"recipient":{"id":"510249619162304"},"timestamp":1468152897212,"request_thread_control":{"requested_owner_app_id":"123456789","metadata":"Additional content that the caller wants to set"}}]}]}`)
 		c := make(chan bool)
 		go func() {
 			wg.Wait()

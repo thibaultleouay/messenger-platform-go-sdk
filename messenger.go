@@ -27,6 +27,12 @@ type (
 	MessageReadHandler func(Event, MessageOpts, Read)
 	// MessageEchoHandler is called when a message is sent by your page
 	MessageEchoHandler func(Event, MessageOpts, MessageEcho)
+	// TakeThreadHandler is called when when control of the conversation has been taken away.
+	TakeThreadHandler func(Event, MessageOpts, TakeThreadControl)
+	// RequestThreadHandler is called when  event with the request_thread_control property when /request_thread_control` is called.
+	RequestThreadHandler func(Event, MessageOpts, RequestThreadControl)
+	// PassThreadHandler is called when thread control is passed to an app
+	PassThreadHandler func(Event, MessageOpts, PassThreadControl)
 )
 
 // DebugType describes available debug type options as documented on https://developers.facebook.com/docs/graph-api/using-graph-api#debugging
@@ -55,6 +61,9 @@ type Messenger struct {
 	Authentication   AuthenticationHandler
 	MessageRead      MessageReadHandler
 	MessageEcho      MessageEchoHandler
+	TakeThread       TakeThreadHandler
+	PassThread       PassThreadHandler
+	RequestThread    RequestThreadHandler
 
 	Client  *http.Client
 	Context context.Context
@@ -123,6 +132,18 @@ func (m *Messenger) handlePOST(rw http.ResponseWriter, req *http.Request) {
 			} else if message.Read != nil {
 				if m.MessageRead != nil {
 					m.MessageRead(entry.Event, message.MessageOpts, *message.Read)
+				}
+			} else if message.TakeThreadControl != nil {
+				if m.TakeThread != nil {
+					m.TakeThread(entry.Event, message.MessageOpts, *message.TakeThreadControl)
+				}
+			} else if message.PassThreadControl != nil {
+				if m.PassThread != nil {
+					m.PassThread(entry.Event, message.MessageOpts, *message.PassThreadControl)
+				}
+			} else if message.RequestThreadControl != nil {
+				if m.RequestThread != nil {
+					m.RequestThread(entry.Event, message.MessageOpts, *message.RequestThreadControl)
 				}
 			} else if m.Authentication != nil {
 				m.Authentication(entry.Event, message.MessageOpts, message.Optin)

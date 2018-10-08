@@ -34,15 +34,16 @@ type MessageEvent struct {
 	Event
 	Messaging []struct {
 		MessageOpts
-		Message           *MessageEcho       `json:"message,omitempty"`
-		Delivery          *Delivery          `json:"delivery,omitempty"`
-		Postback          *Postback          `json:"postback,omitempty"`
-		Optin             *Optin             `json:"optin,omitempty"`
-		Read              *Read              `json:"read,omitempty"`
-		Referral          *Referral          `json:"referral,omitempty"`
-		PassThreadControl *PassThreadControl `json:"pass_thread_control,omitempty"`
-		TakeThreadControl *TakeThreadControl `json:"take_thread_control,omitempty"`
-	} `json:"messaging"`
+		Message              *MessageEcho          `json:"message,omitempty"`
+		Delivery             *Delivery             `json:"delivery,omitempty"`
+		Postback             *Postback             `json:"postback,omitempty"`
+		Optin                *Optin                `json:"optin,omitempty"`
+		Read                 *Read                 `json:"read,omitempty"`
+		Referral             *Referral             `json:"referral,omitempty"`
+		PassThreadControl    *PassThreadControl    `json:"pass_thread_control,omitempty"`
+		RequestThreadControl *RequestThreadControl `json:"request_thread_control,omitempty"`
+		TakeThreadControl    *TakeThreadControl    `json:"take_thread_control,omitempty"`
+	} `json:"messaging,omitempty"`
 }
 
 // ReceivedMessage contains message specific information included with an echo
@@ -90,15 +91,22 @@ type Referral struct {
 // The Pass Thread Control API of the handover protocol is used to pass control of a conversation from one app to another.
 // https://developers.facebook.com/docs/messenger-platform/handover-protocol/take-thread-control
 type PassThreadControl struct {
-	NewOwnerAppID int64  `json:"new_owner_app_id,omitempty"`
+	NewOwnerAppID int64  `json:"new_owner_app_id,string,omitempty"`
 	Metadata      string `json:"metadata,omitempty"`
 }
 
 // Take Thread Control API allows the app with the Primary Receiver role to take control of the conversation
 // https://developers.facebook.com/docs/messenger-platform/handover-protocol/pass-thread-control
 type TakeThreadControl struct {
-	PreviousOwnerAppID int64  `json:"previous_owner_app_id,omitempty"`
+	PreviousOwnerAppID int64  `json:"previous_owner_app_id,string,omitempty"`
 	Metadata           string `json:"metadata,omitempty"`
+}
+
+// Requested Thread Control API allows a Secondary Receiver app to notify the Primary Receiver that it wants control of the chat
+// https://developers.facebook.com/docs/messenger-platform/handover-protocol/request-thread-control
+type RequestThreadControl struct {
+	RequestedOwnerAppID int64  `json:"requested_owner_app_id,string,omitempty"`
+	Metadata            string `json:"metadata,omitempty"`
 }
 
 // Optin contains information specific to Opt-In callbacks.
