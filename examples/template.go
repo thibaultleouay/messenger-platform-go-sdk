@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/maciekmm/messenger-platform-go-sdk"
-	"github.com/maciekmm/messenger-platform-go-sdk/template"
+	"github.com/thibaultleouay/messenger-platform-go-sdk"
+	"github.com/thibaultleouay/messenger-platform-go-sdk/template"
 )
 
 func init() {

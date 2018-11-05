@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/maciekmm/messenger-platform-go-sdk/template"
+	"github.com/thibaultleouay/messenger-platform-go-sdk/template"
 )
 
 func TestAttachmentUnmarshalling(t *testing.T) {
